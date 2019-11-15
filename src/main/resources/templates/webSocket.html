@@ -7,31 +7,31 @@
 <body>
 <script th:inline="javascript">
     var socket;
-    if(typeof(WebSocket) == "undefined") {
+    if (typeof(WebSocket) == "undefined") {
         console.log("您的浏览器不支持WebSocket");
-    }else{
+    } else {
         console.log("您的浏览器支持WebSocket");
         //实现化WebSocket对象，指定要连接的服务器地址与端口  建立连接
         //webSocket = new WebSocket("ws://localhost:8080/websocket/20");
         var basePath = [[${basePath}]];
         var cid = [[${cid}]]
-        webSocket = new WebSocket((basePath+"websocket/"+cid).replace("http","ws"));
+        webSocket = new WebSocket((basePath + "websocket/" + cid).replace("http", "ws"));
         //打开事件
-        webSocket.onopen = function() {
+        webSocket.onopen = function () {
             console.log("Socket 已打开");
             //socket.send("这是来自客户端的消息" + location.href + new Date());
         };
         //获得消息事件
-        webSocket.onmessage = function(msg) {
+        webSocket.onmessage = function (msg) {
             console.log(msg.data);
             //发现消息进入    开始处理前端触发逻辑
         };
         //关闭事件
-        webSocket.onclose = function() {
+        webSocket.onclose = function () {
             console.log("Socket已关闭");
         };
         //发生了错误事件
-        webSocket.onerror = function() {
+        webSocket.onerror = function () {
             alert("Socket发生了错误");
             //此时可以尝试刷新页面
         }
@@ -40,7 +40,18 @@
         // $(window).unload(function(){
         //     socket.close();
         //});
+        // 往后台服务器发送消息.
+        function sendMessage() {
+            var sendmsg = document.getElementById("sendMsg").value;
+            console.log("发送的消息：" + sendmsg);
+            // 发送至后台服务器中.
+            webSocket.send(sendmsg);
+        }
     }
 </script>
+<button onclick="buildConnection();">开始建立链接</button>
+<hr>
+<input id="sendMsg"/>
+<button onclick="sendMessage();">消息发送</button>
 </body>
 </html>
